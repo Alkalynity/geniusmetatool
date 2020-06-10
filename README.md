@@ -6,7 +6,7 @@ The process of updating song metadata on Genius is tedious. Updating song metada
 
 This tool does not create additional song pages, it ONLY updates metadata for song pages on an *existing* album. The tool checks if the album exists before attempting to update the song pages.
 
-*THIS IS CURRENTLY WINDOWS-ONLY.* I have no plans to officially support mac due to their draconian app notarization that rolled out with Catalina (10.15). However, in theory it should still work if you built it yourself and ran it, but I haven't tested it on \*nix so YYMV.
+*THIS IS CURRENTLY WINDOWS-ONLY.* I have no plans to officially support mac due to their draconian app notarization that rolled out with Catalina (10.15). However, in theory it should still work if you built it yourself and ran it, but I haven't tested it on \*nix so YMMV.
 
 It's currently still *very* buggy. It doesn't handle errors from Genius very well, particularly when it (Genius) fails to update the song metadata (for reasons I still don't understand yet). The GUI in particular is a big CF, mostly because I suck at GUI development and (admittedly) don't care enough to improve it beyond being usable. That being said, if it's a big enough problem that it hinders people from being able to use it properly, I'll try to fix it the best I can. I wanted to get a release out so other people can test it and give me feedback.
 
