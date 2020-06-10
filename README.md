@@ -28,9 +28,19 @@ Either double-click on the executable or run it from the command line:
 metatoolv1.0.exe
 ```
 
-## IV. PLANNED FEATURES
+## IV. CONFIG FILE
+**NOTE: the config file must be located in the SAME directory as the executable.**
+
+[LOGIN]
+* username: (str) your Genius username.
+* password: (str) your Genius password.
+
+[GENERAL]
+* headless: (bool) Runs the browser in headless mode. Setting to False means the browser will open as a separate window and you can watch it update the metadata yourself. This can be useful for debugging or if you're bored and want to watch it zip around the website :^) True by default.
+
+## V. PLANNED FEATURES
 * Linux support
 * tbd
 
-## V. CONTACT INFO
+## VI. CONTACT INFO
 either message me on [Genius](https://genius.com/Alkalynity) or on slack, idk
