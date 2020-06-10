@@ -40,7 +40,8 @@ metatool1.0.exe
 
 ## V. PLANNED FEATURES
 * Linux support
-* tbd
+* Add a track number column for "additional roles" to only add roles for specific tracks
+* ...
 
 ## VI. CONTACT INFO
 either message me on [Genius](https://genius.com/Alkalynity) or on slack, idk
