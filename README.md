@@ -2,7 +2,7 @@
 
 ## I. INTRODUCTION: WHAT DOES THIS TOOL DO?
 
-The process of updating song metadata on Genius is tedious. Updating song metadata for *every song on an album* - when each song has almost exactly the same metadata items - is even more so, since for whatever reason Genius hasn't added a means of adding metadata album-wide. That's why I wrote this, because fuck it, why not ¯\_(ツ)_/¯
+The process of updating song metadata on Genius is tedious. Updating song metadata for *every song on an album* - when each song has almost exactly the same metadata items - is even more so, since for whatever reason Genius hasn't added a means of adding metadata album-wide. That's why I wrote this, because fuck it, why not ¯\\_(ツ)_/¯
 
 This tool does not create additional song pages, it ONLY updates metadata for song pages on an *existing* album. The tool checks if the album exists before attempting to update the song pages.
 
