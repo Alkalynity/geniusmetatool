@@ -320,8 +320,9 @@ def find_and_click_suggestion(driver, values_box, v):
             found = True
             break
 
+    # TODO: idk, do something?
     if not found:
-        print('Value %s not found in suggested artists.' % v)
+        pass
 
 
 def main():

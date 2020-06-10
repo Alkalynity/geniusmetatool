@@ -254,7 +254,6 @@ class Ui_App(QtWidgets.QMainWindow):
                 # iterate over the table, and add each row as a new dict entry
                 elif isinstance(widget, QtWidgets.QTableWidget):
                     row_count = widget.rowCount()
-                    print(row_count)
                     # idk why this is the way it is
                     for row in reversed(range(row_count)):
                         widget.removeRow(row)
@@ -311,7 +310,11 @@ class Ui_App(QtWidgets.QMainWindow):
 
         # lock and load
         Window.setWindowTitle("Updating metadata, this could take awhile...")
-        self.run_metatool_from_dict(meta_dict)
+        ok = self.run_metatool_from_dict(meta_dict)
+        if ok:
+            Window.setWindowTitle("Album complete.")
+        else:
+            Window.setWindowTitle("Album failed to update. See console for info.")
 
     def run_metatool_from_dict(self, meta_dict):
         # we added the url from the GUI into the dict (note all dict values are lists)
@@ -326,11 +329,10 @@ class Ui_App(QtWidgets.QMainWindow):
         for link in song_links:
             try:
                 title = update_song_metadata(driver, link, meta_dict)
-            except:
-                print("Error while updating metadata. Exiting...")
-                Window.setWindowTitle("Album failed to update.")
+            except Exception as e:
+                print(e)
                 driver.close()
-                return
+                return False
 
-        Window.setWindowTitle("Album complete.")
         driver.close()
+        return True
