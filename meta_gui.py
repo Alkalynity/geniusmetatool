@@ -102,7 +102,7 @@ class Ui_App(QtWidgets.QMainWindow):
         self.releaseDateEdit = QtWidgets.QDateEdit(self.widget)
         self.releaseDateEdit.setObjectName("releaseDateEdit")
         self.releaseDateEdit.setDate(QtCore.QDate(1900, 1, 1))
-        self.releaseDateEdit.setToolTip("Release date. Format: MM/DD/YYYY (sorry non-Americans)\n"
+        self.releaseDateEdit.setToolTip("Release date.\n"
                                         "Note that leaving the date as default (1/1/1900) will not update it on the\n"
                                         "song pages.")
         self.gridLayout_7.addWidget(self.releaseDateEdit, 1, 0, 1, 1)
@@ -330,8 +330,8 @@ class Ui_App(QtWidgets.QMainWindow):
             try:
                 title = update_song_metadata(driver, link, meta_dict)
             except Exception as e:
+                # print but don't close the browser
                 print(e)
-                driver.close()
                 return False
 
         driver.close()

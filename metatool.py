@@ -204,6 +204,9 @@ def update_song_metadata(driver, link, meta_dict):
     edit_button = driver.find_element_by_class_name("tiny_edit_button-svg")
     edit_button.click()
 
+    # let it think for a second or two
+    time.sleep(2)
+
     # now update the metadata
     # open all four metadata tabs, just to be safe
     open_meta_tabs(driver)
