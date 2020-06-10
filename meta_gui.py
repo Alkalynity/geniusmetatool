@@ -12,7 +12,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import re
 from metatool import genius_album_exists, get_song_urls_from_album, update_song_metadata, startup, login
 
-
 class Ui_App(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui_App, self).__init__()
@@ -312,8 +311,10 @@ class Ui_App(QtWidgets.QMainWindow):
         Window.setWindowTitle("Updating metadata, this could take awhile...")
         ok = self.run_metatool_from_dict(meta_dict)
         if ok:
+            print("Metadata updated.")
             Window.setWindowTitle("Album complete.")
         else:
+            print("Metadata failed to update.")
             Window.setWindowTitle("Album failed to update. See console for info.")
 
     def run_metatool_from_dict(self, meta_dict):

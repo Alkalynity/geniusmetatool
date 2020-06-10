@@ -16,8 +16,9 @@ config.read('config.ini')
 my_username = config.get('LOGIN', 'username').strip('"')
 my_password = config.get('LOGIN', 'password').strip('"')
 
-debug = '-d' in sys.argv or '-debug' in sys.argv
 disable_headless = config.get('GENERAL', 'headless') == 'False'
+# debug will slow things down and give us better log info
+debug = config.get('GENERAL', 'debug') == 'True'
 
 if 'win' in sys.platform:
     pathname = os.path.join(os.getcwd() + '\\')
@@ -58,8 +59,6 @@ def process_cli_input(user_input, album_url):
     meta_dict = {}
     ok = True
     tokenized = user_input.split()
-    if 'file=' in tokenized[0]:
-        get_meta_from_json(tokenized[0].split("=")[1])
     for token in tokenized:
         try:
             field, values = token.split('=')
@@ -89,11 +88,6 @@ def process_cli_input(user_input, album_url):
 
         values = values.split(',')
 
-        # process each arg; most can be handled easily, but date requires special care
-        if field == "release date" and not validate_date(values):
-            print("Error: date: %s is not formatted properly. format: MM/DD/YYYY\n")
-            return {}
-
         # TODO: I'm using capwords here because we search case-insensitively when updating the metadata...this is dumb
         meta_dict.update({string.capwords(field): values})
 
@@ -108,22 +102,12 @@ def process_cli_input(user_input, album_url):
     return meta_dict
 
 
-# TODO: validates if the date passed in is formatted properly. returns true if date is valid
-def validate_date(date_str):
-    return True
-
-
-# TODO: get metadata from json file
-def get_meta_from_json(filename):
-    print_red("Importing metadata from JSON is not yet supported.")
-
-
 def print_usage():
     print("usage: \n"
                  "file=<file_name.json> (NOT CURRENTLY SUPPORTED)\n"
                  "Date: date=<MM/DD/YYYY>\n"
                  "All other fields: <field>=<value1>,<value2>,...\n")
-    print_red("FIELDS are CASE-INSENSITIVE; VALUES are CASE-SENSITIVE\n")
+    print("FIELDS are CASE-INSENSITIVE; VALUES are CASE-SENSITIVE\n")
     print("Separate all FIELDS by SPACES and VALUES by COMMAS; if you need to use spaces in a field or value,"
                  " use '_'\n"
                  "EXAMPLE: produced_by=Abraham_Lincoln,George_Washington\n"
@@ -148,6 +132,7 @@ def genius_album_exists(url):
 # given the URL of an album, get the song page URLs so we can update their metadata
 # returns a list of links
 def get_song_urls_from_album(album_url):
+    debug_print("getting songs from album url: " + album_url)
     response = requests.get(album_url)
     tree = html.fromstring(response.content)
     links = tree.xpath('//*[@class="u-display_block"]/@href')
@@ -168,6 +153,7 @@ def startup():
 
 
 def login(driver):
+    debug_print("logging in...")
     login_box = driver.find_element_by_xpath("//*[@class='last_button apply_hover_on_active ']")
     login_box.click()
 
@@ -184,28 +170,52 @@ def login(driver):
 # this opens the four metadata tabs in the editor
 # I'm not sure if it's necessary to open them, but until I test it this is fine
 def open_meta_tabs(driver):
+    debug_print("opening meta tabs")
+    if debug:
+        time.sleep(1)
     title_and_artist_tab = driver.find_element_by_xpath("//div[contains(text(),'Title and Artists')]")
     title_and_artist_tab.click()
 
+    if debug:
+        time.sleep(1)
     avi_tab = driver.find_element_by_xpath("//div[contains(text(),'Audio, Video & Images')]")
     avi_tab.click()
 
+    if debug:
+        time.sleep(1)
     adlt_tab = driver.find_element_by_xpath("//div[contains(text(),'Albums, Date, Location & Tags')]")
     adlt_tab.click()
 
+    if debug:
+        time.sleep(1)
     song_relationship_tab = driver.find_element_by_xpath("//div[contains(text(),'Song Relationships')]")
     song_relationship_tab.click()
+    debug_print("tabs opened.")
 
+
+# if debug is True in config, print string
+def debug_print(string):
+    debug_string = "DEBUG: " + string
+    if debug:
+        print(debug_string)
 
 def update_song_metadata(driver, link, meta_dict):
+    debug_print("getting link: %s" % link)
     driver.get(link)
+    if debug:
+        time.sleep(5)
 
     # find the edit button and click it
+    debug_print("Finding and clicking edit_button...")
     edit_button = driver.find_element_by_class_name("tiny_edit_button-svg")
     edit_button.click()
 
     # let it think for a second or two
-    time.sleep(2)
+    debug_print("edit_button clicked.")
+    if debug:
+        time.sleep(5)
+    else:
+        time.sleep(1)
 
     # now update the metadata
     # open all four metadata tabs, just to be safe
@@ -214,12 +224,17 @@ def update_song_metadata(driver, link, meta_dict):
     # get all the input boxes
     input_boxes = driver.find_elements_by_xpath("//div[contains(@class, 'square_form-input_and_label')]")
     for field, value in meta_dict.items():
+        debug_print("adding field: " + field + " with value: " + value)
+        if debug:
+            time.sleep(1)
         # need to handle date separately
         if "release date" == field.lower():
+            debug_print("adding release date")
             date_as_list = value[0].split('/')
             update_date(driver, date_as_list)
             continue
         elif "primary tag" == field.lower():
+            debug_print("adding primary tag")
             combo_box = Select(driver.find_element_by_xpath("//select[@ng-model='song.primary_tag']"))
             combo_box.select_by_visible_text(value)
             continue
@@ -232,12 +247,14 @@ def update_song_metadata(driver, link, meta_dict):
         # if we found it, cool
         # TODO: send values to (correct) box
         if box:
+            debug_print("adding 'generic'")
             # "box" is a list right now
             box = box[0]
             values_box = box.find_element_by_xpath('.//input')
             # don't try to click anything or find the suggestion if it's the recording location
             # the .join is because it's a list (sometimes a list of strings by accident...)
             if "recorded at" in field.lower():
+                debug_print("adding recorded at")
                 values_box.clear()
                 values_box.send_keys(', '.join(value))
             else:
@@ -303,6 +320,7 @@ def add_additional_artist(driver, field, values):
 
 
 def find_and_click_suggestion(driver, values_box, v):
+    debug_print("trying to find and click suggestion...")
     found = False
     # TODO: this doesn't clear boxes that can have multiple artists...it will just append instead of overwriting
     values_box.clear()
@@ -321,11 +339,12 @@ def find_and_click_suggestion(driver, values_box, v):
         if v.lower() == s_text or 'create new' in s_text:
             suggestion.click()
             found = True
+            debug_print("found suggestion and successfully clicked!")
             break
 
     # TODO: idk, do something?
     if not found:
-        pass
+        debug_print("Value %s not found." % v)
 
 
 def main():
