@@ -25,7 +25,7 @@ The first time you run it, it's likely that Windows will give you a popup about 
 
 Either double-click on the executable or run it from the command line:
 ```sh
-metatoolv1.0.exe
+metatool1.0.exe
 ```
 
 ## IV. CONFIG FILE
