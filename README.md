@@ -41,6 +41,7 @@ metatool1.0.exe
 ## V. PLANNED FEATURES
 * Linux support
 * Add a track number column for "additional roles" to only add roles for specific tracks
+* "delete additional artist" button
 * ...
 
 ## VI. CONTACT INFO
