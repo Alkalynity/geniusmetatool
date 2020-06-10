@@ -224,14 +224,13 @@ def update_song_metadata(driver, link, meta_dict):
     # get all the input boxes
     input_boxes = driver.find_elements_by_xpath("//div[contains(@class, 'square_form-input_and_label')]")
     for field, value in meta_dict.items():
-        debug_print("adding field: " + field + " with value: " + value)
         if debug:
             time.sleep(1)
         # need to handle date separately
         if "release date" == field.lower():
             debug_print("adding release date")
-            date_as_list = value[0].split('/')
-            update_date(driver, date_as_list)
+            # date is currently a list
+            update_date(driver, value)
             continue
         elif "primary tag" == field.lower():
             debug_print("adding primary tag")
