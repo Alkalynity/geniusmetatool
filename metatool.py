@@ -199,7 +199,20 @@ def debug_print(string):
     if debug:
         print(debug_string)
 
-def update_song_metadata(driver, link, meta_dict):
+
+# TODO: finish this
+def check_if_tracklist_set(album_url, num_songs):
+    response = requests.get(album_url)
+    tree = html.fromstring(response.content)
+    tracklist_number_elements = [e for e in tree.xpath(
+        "//span[contains(@class, 'chart_row-number_container-number chart_row-number_container-number--gray')]/span") if e.text]
+    if len(tracklist_number_elements) == num_songs:
+        return True
+    else:
+        return False
+
+
+def update_song_metadata(driver, link, meta_dict, song_num):
     debug_print("getting link: %s" % link)
     driver.get(link)
     if debug:
@@ -224,6 +237,25 @@ def update_song_metadata(driver, link, meta_dict):
     # get all the input boxes
     input_boxes = driver.find_elements_by_xpath("//div[contains(@class, 'square_form-input_and_label')]")
     for field, value in meta_dict.items():
+        # extract track info from field, if it exists
+        field_track_list = field.split('|')
+        track_nums = []
+        # check if we have track info
+        if len(field_track_list) > 1:
+            debug_print("Track numbers detected. checking if current song is in track_nums...")
+            field = field_track_list[0]
+            track_nums = field_track_list[1].replace(' ', '').split(',')
+            # convert list of strings to ints
+            track_nums = [int(i) for i in track_nums]
+            if song_num not in track_nums:
+                debug_print("role %s is not set for track number %d. skipping" % (field, song_num))
+                continue
+            else:
+                debug_print("song is in track_nums. will update")
+
+        # otherwise, carry on
+        else:
+            field = field_track_list
         if debug:
             time.sleep(1)
         # need to handle date separately
@@ -244,7 +276,6 @@ def update_song_metadata(driver, link, meta_dict):
         box = driver.find_elements_by_xpath(
             "//div[contains(@class, 'square_form-input_and_label') and contains(@label,'" + field + "')]")
         # if we found it, cool
-        # TODO: send values to (correct) box
         if box:
             debug_print("adding 'generic'")
             # "box" is a list right now

@@ -10,7 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import re
-from metatool import genius_album_exists, get_song_urls_from_album, update_song_metadata, startup, login
+from metatool import genius_album_exists, get_song_urls_from_album, \
+    update_song_metadata, startup, login, check_if_tracklist_set
 
 class Ui_App(QtWidgets.QMainWindow):
     def __init__(self):
@@ -158,7 +159,7 @@ class Ui_App(QtWidgets.QMainWindow):
         self.roleTableWidget.setSizePolicy(sizePolicy)
         self.roleTableWidget.setAlternatingRowColors(True)
         self.roleTableWidget.setObjectName("roleTableWidget")
-        self.roleTableWidget.setColumnCount(2)
+        self.roleTableWidget.setColumnCount(3)
         self.roleTableWidget.setRowCount(1)
         item = QtWidgets.QTableWidgetItem()
         self.roleTableWidget.setVerticalHeaderItem(0, item)
@@ -166,6 +167,8 @@ class Ui_App(QtWidgets.QMainWindow):
         self.roleTableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         self.roleTableWidget.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.roleTableWidget.setHorizontalHeaderItem(2, item)
         self.roleTableWidget.horizontalHeader().setVisible(True)
         self.roleTableWidget.verticalHeader().setVisible(False)
         self.verticalLayout.addWidget(self.roleTableWidget)
@@ -209,6 +212,8 @@ class Ui_App(QtWidgets.QMainWindow):
         item.setText(_translate("Window", "Additional Role"))
         item = self.roleTableWidget.horizontalHeaderItem(1)
         item.setText(_translate("Window", "Artists in Role"))
+        item = self.roleTableWidget.horizontalHeaderItem(2)
+        item.setText(_translate("Window", "Track Numbers"))
 
     def album_validator(self):
         album_url = self.albumUrlEdit.text()
@@ -260,6 +265,7 @@ class Ui_App(QtWidgets.QMainWindow):
 
     # I shouldn't be passing Window in here but fuck it ¯\_(ツ)_/¯
     def collectInput(self, Window):
+        # dict containing field-value pairs
         meta_dict = {}
         # we have to handle primary tag separately because for some dumbass reason it's not in mainLayout
         combo_box = self.groupBox.findChild(QtWidgets.QComboBox)
@@ -293,9 +299,16 @@ class Ui_App(QtWidgets.QMainWindow):
                     for row in range(row_count):
                         field = widget.item(row, 0)
                         value = widget.item(row, 1)
+                        track_nums = widget.item(row, 2)
+                        # only add if both field and value are filled
                         if field and value:
                             values_list = value.text().split(',')
-                            meta_dict.update({field.text(): values_list})
+                            field_text = field.text()
+                            # the notation we're going to use to indicate track numbers is append
+                            # a pipe and put the track numbers after the field.
+                            if track_nums:
+                                field_text = field_text + "|" + track_nums.text()
+                            meta_dict.update({field_text: values_list})
                     # we updated the dict, so clear field and values
                     field = ''
                     value = ''
@@ -327,9 +340,14 @@ class Ui_App(QtWidgets.QMainWindow):
         login(driver)
         # get a list of songs to update from the album page
         song_links = get_song_urls_from_album(album_url)
+        # check if the tracklist is set
+        tracklist_set = check_if_tracklist_set(album_url, len(song_links))
+        # keeps track of what song we're on
+        song_num = 1
         for link in song_links:
             try:
-                title = update_song_metadata(driver, link, meta_dict)
+                title = update_song_metadata(driver, link, meta_dict, song_num)
+                song_num += 1
             except Exception as e:
                 # print but don't close the browser
                 print(e)
