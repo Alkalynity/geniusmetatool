@@ -102,9 +102,12 @@ class Ui_App(QtWidgets.QMainWindow):
         self.releaseDateEdit = QtWidgets.QDateEdit(self.widget)
         self.releaseDateEdit.setObjectName("releaseDateEdit")
         self.releaseDateEdit.setDate(QtCore.QDate(1900, 1, 1))
-        self.releaseDateEdit.setToolTip("Release date.\n"
-                                        "Note that leaving the date as default (1/1/1900) will not update it on the\n"
-                                        "song pages.")
+        self.releaseDateEdit.setToolTip("Release date. Note that leaving the date as default (1/1/1900)\n"
+                                        "will not update it on the song pages.\n"
+                                        "IMPORTANT: if you only see two digits for the year (e.g. MM/DD/YY or DD/MM/YY), please\n"
+                                        "change your localization settings on your computer to a format with four digits\n"
+                                        "(e.g. MM/DD/YYYY or DD/MM/YYYY). Failure to do so will cause the GUI to interpret\n"
+                                        "the date as 19YY instead of 20YY, which is probably not what you want. This is an issue with PyQt.")
         self.gridLayout_7.addWidget(self.releaseDateEdit, 1, 0, 1, 1)
         self.mainLayout.addLayout(self.gridLayout_7, 3, 1, 1, 1)
         self.gridLayout_8 = QtWidgets.QGridLayout()
@@ -150,8 +153,12 @@ class Ui_App(QtWidgets.QMainWindow):
         self.addAdditionalCreditsButton = QtWidgets.QPushButton(self.widget)
         self.addAdditionalCreditsButton.setObjectName("addAdditionalCreditsButton")
         self.verticalLayout.addWidget(self.addAdditionalCreditsButton)
+        self.removeAdditionalCreditsButton = QtWidgets.QPushButton(self.widget)
+        self.removeAdditionalCreditsButton.setObjectName("removeAdditionalCreditsButton")
+        self.verticalLayout.addWidget(self.removeAdditionalCreditsButton)
         self.roleTableWidget = QtWidgets.QTableWidget(self.widget)
-        self.roleTableWidget.setToolTip("Add additional roles. Separate artists by commas.")
+        self.roleTableWidget.setToolTip("Add additional roles. Separate artists by commas. If track numbers are left\n"
+                                        "blank, then the role will be added for every song on the album.")
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -184,6 +191,7 @@ class Ui_App(QtWidgets.QMainWindow):
         self.okButton.clicked.connect(lambda: self.collectInput(Window))
         self.clearButton.clicked.connect(lambda : self.clearInput())
         self.addAdditionalCreditsButton.clicked.connect(lambda: self.addRow())
+        self.removeAdditionalCreditsButton.clicked.connect(lambda: self.deleteRow())
         self.albumUrlEdit.textChanged.connect(lambda: self.album_validator())
         QtCore.QMetaObject.connectSlotsByName(Window)
 
@@ -208,6 +216,7 @@ class Ui_App(QtWidgets.QMainWindow):
         self.primaryTagComboBox.setItemText(6, _translate("Window", "Non-Music"))
         self.label_10.setText(_translate("Window", "Tags"))
         self.addAdditionalCreditsButton.setText(_translate("Window", "Add Additional Credits"))
+        self.removeAdditionalCreditsButton.setText(_translate("Window", "Remove Last Row"))
         item = self.roleTableWidget.horizontalHeaderItem(0)
         item.setText(_translate("Window", "Additional Role"))
         item = self.roleTableWidget.horizontalHeaderItem(1)
@@ -241,6 +250,10 @@ class Ui_App(QtWidgets.QMainWindow):
     def addRow(self):
         rowPosition = self.roleTableWidget.rowCount()
         self.roleTableWidget.insertRow(rowPosition)  # insert new row
+
+    def deleteRow(self):
+        rowPosition = self.roleTableWidget.rowCount()
+        self.roleTableWidget.removeRow(rowPosition - 1)  # delete last row
 
     def clearInput(self):
         self.primaryTagComboBox.setCurrentIndex(0)
