@@ -13,8 +13,7 @@ It's currently still *very* buggy. It doesn't handle errors from Genius very wel
 I also have a no-GUI version that operates strictly from the command line (which I prefer, but I can understand why it's harder to use in general). If there's enough interest I can put out the GUI-less version for people to use as well.
 
 ## II. QUICK AND DIRTY SETUP
-0. Install google chrome, if you don't have it installed already.
-0.5. Check your date/time format. If the year is only two digits (e.g. `20` instead of `2020`), go to `Control Panel -> Change date, time, or number formats` and change your short date format to a format with four digits. This is to work around a PyQt issue where only supplying two digits defaults to `19XX` instead of `20XX`.
+0. Install google chrome, if you don't have it installed already. Next, check your date/time format. If the year is only two digits (e.g. `20` instead of `2020`), go to `Control Panel -> Change date, time, or number formats` and change your short date format to a format with four digits. This is to work around a PyQt issue where only supplying two digits defaults to `19XX` instead of `20XX`.
 1. Download chromedriver from here: https://chromedriver.chromium.org/downloads. MAKE SURE you download a version that supports the version of chrome you have. If you aren't sure what version of chrome you have, go here: https://www.whatismybrowser.com/detect/what-version-of-chrome-do-i-have
 2. Put chromedriver in the same directory as the metatool executable. Running the tool WILL FAIL if it can't find it.
 3. Update the config_template.ini file with your username and password. RENAME THE FILE to "config.ini". I'll eventually change it so the name isn't hardcoded, but in the meantime it has to be called "config.ini".
