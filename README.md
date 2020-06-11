@@ -21,6 +21,8 @@ I also have a no-GUI version that operates strictly from the command line (which
 
 The first time you run it, it's likely that Windows will give you a popup about allowing the program to run on your network, since it needs access to the internet in order to run. Just give it access to your private network and (maybe) restart the program.
 
+**IMPORTANT:** There's a [known issue](https://github.com/Alkalynity/geniusmetatool/issues/1) where the tool will fail to click a certain element when it's running. The fix for this is to set `headless = False` in the config file and run the tool until it hits the error, go into the browser and click "accept" on the banner at the top of the page. The issue is that the banner blocks the tool from clicking on the metadata dialog. I'm working on fixing this in an upcoming release, but this is the easiest way to work around it in the meantime.
+
 ## III. USAGE
 
 Either double-click on the executable or run it from the command line:
