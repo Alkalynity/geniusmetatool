@@ -13,13 +13,15 @@ It's currently still *very* buggy. It doesn't handle errors from Genius very wel
 I also have a no-GUI version that operates strictly from the command line (which I prefer, but I can understand why it's harder to use in general). If there's enough interest I can put out the GUI-less version for people to use as well.
 
 ## II. QUICK AND DIRTY SETUP
-0. Install google chrome, if you don't have it installed already.
+0. Install google chrome, if you don't have it installed already. Next, check your date/time format. If the year is only two digits (e.g. `20` instead of `2020`), go to `Control Panel -> Change date, time, or number formats` and change your short date format to a format with four digits. This is to work around a PyQt issue where only supplying two digits defaults to `19XX` instead of `20XX`.
 1. Download chromedriver from here: https://chromedriver.chromium.org/downloads. MAKE SURE you download a version that supports the version of chrome you have. If you aren't sure what version of chrome you have, go here: https://www.whatismybrowser.com/detect/what-version-of-chrome-do-i-have
 2. Put chromedriver in the same directory as the metatool executable. Running the tool WILL FAIL if it can't find it.
 3. Update the config_template.ini file with your username and password. RENAME THE FILE to "config.ini". I'll eventually change it so the name isn't hardcoded, but in the meantime it has to be called "config.ini".
 4. Run the program, either by clicking on it or running through the command prompt. I suggest doing the latter, since it will give you info in case it crashes since I don't have it outputting to a log yet. In the event of it failing to open, it's most likely that it couldn't find the config file, or the config file is malformed.
 
 The first time you run it, it's likely that Windows will give you a popup about allowing the program to run on your network, since it needs access to the internet in order to run. Just give it access to your private network and (maybe) restart the program.
+
+**IMPORTANT:** There's a [known issue](https://github.com/Alkalynity/geniusmetatool/issues/1) where the tool will fail to click a certain element when it's running. The fix for this is to set `headless = False` in the config file and run the tool until it hits the error, go into the browser and click "accept" on the banner at the top of the page. The issue is that the banner blocks the tool from clicking on the metadata dialog. I'm working on fixing this in an upcoming release, but this is the easiest way to work around it in the meantime.
 
 ## III. USAGE
 
@@ -37,13 +39,18 @@ metatool1.0.exe
 
 [GENERAL]
 * headless: (bool) Runs the browser in headless mode. Setting to False means the browser will open as a separate window and you can watch it update the metadata yourself. This can be useful for debugging or if you're bored and want to watch it zip around the website :^) True by default.
+* debug: (bool) Runs the tool in debug mode. This will slow the tool down and print more debug info in the console. If you're hitting problems, set this to `True` and send me the log output, a screenshot of the browser (if `headless = False`) and a screenshot of the input you used in the GUI.
 
-## V. PLANNED FEATURES
+## V. PLANNED FEATURES/KNOWN ISSUES
 * Linux support
 * Add a track number column for "additional roles" to only add roles for specific tracks
+* fix table formatting
 * "delete additional artist" button
-* handle European dates? need to make sure they work
+* Comptuters with the date format as `DD-MM-YY` will be interpreted as `19YY` instead of `20YY`. For now, changing the computer's localization settings to a four-digit year will fix the issue.
+* the aforementioned issue with the banner blocking the metadata dialog.
 * ...
 
 ## VI. CONTACT INFO
 either message me on [Genius](https://genius.com/Alkalynity) or on slack, idk
+
+If you hit a bug, set `debug = True` in the config file and send me the log output, a screenshot of the browser (if `headless = False`) and a screenshot of the input you used in the GUI. I'll try to get back to you as soon as I'm able.
