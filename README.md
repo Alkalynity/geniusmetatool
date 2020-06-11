@@ -8,7 +8,7 @@ This tool does not create additional song pages, it ONLY updates metadata for so
 
 *THIS IS CURRENTLY WINDOWS-ONLY.* I have no plans to officially support mac due to their draconian app notarization that rolled out with Catalina (10.15). However, in theory it should still work if you built it yourself and ran it, but I haven't tested it on \*nix so YMMV.
 
-It's currently still *very* buggy. It doesn't handle errors from Genius very well, particularly when it (Genius) fails to update the song metadata (for reasons I still don't understand yet). The GUI in particular is a big CF, mostly because I suck at GUI development and (admittedly) don't care enough to improve it beyond being usable. That being said, if it's a big enough problem that it hinders people from being able to use it properly, I'll try to fix it the best I can. I wanted to get a release out so other people can test it and give me feedback.
+It's currently still *very* buggy. It doesn't handle errors from Genius very well, particularly when it (Genius) fails to update the song metadata (for reasons I still don't understand yet). The GUI in particular is a big CF, mostly because I suck at GUI development.
 
 I also have a no-GUI version that operates strictly from the command line (which I prefer, but I can understand why it's harder to use in general). If there's enough interest I can put out the GUI-less version for people to use as well.
 
