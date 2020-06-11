@@ -44,8 +44,8 @@ metatool1.0.exe
 ## V. PLANNED FEATURES
 * Linux support
 * Add a track number column for "additional roles" to only add roles for specific tracks
+* fix table formatting
 * "delete additional artist" button
-* handle European dates? need to make sure they work
 * ...
 
 ## VI. CONTACT INFO
