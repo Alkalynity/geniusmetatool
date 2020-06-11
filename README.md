@@ -41,11 +41,13 @@ metatool1.0.exe
 * headless: (bool) Runs the browser in headless mode. Setting to False means the browser will open as a separate window and you can watch it update the metadata yourself. This can be useful for debugging or if you're bored and want to watch it zip around the website :^) True by default.
 * debug: (bool) Runs the tool in debug mode. This will slow the tool down and print more debug info in the console. If you're hitting problems, set this to `True` and send me the log output, a screenshot of the browser (if `headless = False`) and a screenshot of the input you used in the GUI.
 
-## V. PLANNED FEATURES
+## V. PLANNED FEATURES/KNOWN ISSUES
 * Linux support
 * Add a track number column for "additional roles" to only add roles for specific tracks
 * fix table formatting
 * "delete additional artist" button
+* Comptuters with the date format as `DD-MM-YY` will be interpreted as `19YY` instead of `20YY`. For now, changing the computer's localization settings to a four-digit year will fix the issue.
+* the aforementioned issue with the banner blocking the metadata dialog.
 * ...
 
 ## VI. CONTACT INFO
