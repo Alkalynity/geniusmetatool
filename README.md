@@ -39,6 +39,7 @@ metatool1.0.exe
 
 [GENERAL]
 * headless: (bool) Runs the browser in headless mode. Setting to False means the browser will open as a separate window and you can watch it update the metadata yourself. This can be useful for debugging or if you're bored and want to watch it zip around the website :^) True by default.
+* debug: (bool) Runs the tool in debug mode. This will slow the tool down and print more debug info in the console. If you're hitting problems, set this to `True` and send me the log output, a screenshot of the browser (if `headless = False`) and a screenshot of the input you used in the GUI.
 
 ## V. PLANNED FEATURES
 * Linux support
@@ -49,3 +50,5 @@ metatool1.0.exe
 
 ## VI. CONTACT INFO
 either message me on [Genius](https://genius.com/Alkalynity) or on slack, idk
+
+If you hit a bug, set `debug = True` in the config file and send me the log output, a screenshot of the browser (if `headless = False`) and a screenshot of the input you used in the GUI. I'll try to get back to you as soon as I'm able.
