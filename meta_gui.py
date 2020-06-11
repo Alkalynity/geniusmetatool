@@ -259,8 +259,6 @@ class Ui_App(QtWidgets.QMainWindow):
         self.primaryTagComboBox.setCurrentIndex(0)
         for layout in self.mainLayout.children():
             index = 0
-            field = ''
-            value = ''
             while index < layout.count():
                 widget = layout.itemAt(index).widget()
                 if isinstance(widget, QtWidgets.QLineEdit):

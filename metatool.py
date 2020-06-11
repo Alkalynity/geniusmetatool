@@ -11,6 +11,8 @@ from selenium.webdriver.support.ui import Select
 
 config = configparser.ConfigParser()
 config.read('config.ini')
+
+
 # read username and password from config
 # DO NOT include config.ini in git repo unless you wanna your account stolen
 my_username = config.get('LOGIN', 'username').strip('"')
@@ -104,7 +106,6 @@ def process_cli_input(user_input, album_url):
 
 def print_usage():
     print("usage: \n"
-                 "file=<file_name.json> (NOT CURRENTLY SUPPORTED)\n"
                  "Date: date=<MM/DD/YYYY>\n"
                  "All other fields: <field>=<value1>,<value2>,...\n")
     print("FIELDS are CASE-INSENSITIVE; VALUES are CASE-SENSITIVE\n")
@@ -255,7 +256,7 @@ def update_song_metadata(driver, link, meta_dict, song_num):
 
         # otherwise, carry on
         else:
-            field = field_track_list
+            field = field_track_list[0]
         if debug:
             time.sleep(1)
         # need to handle date separately
