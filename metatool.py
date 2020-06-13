@@ -10,17 +10,38 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 
 config = configparser.ConfigParser()
-config.read('config.ini')
-
+# open config file. if we can't find it, fail
+try:
+    config.read('config.ini')
+except:
+    print("Config file could not be read. Check that your config.ini file exists.")
+    exit(1)
 
 # read username and password from config
 # DO NOT include config.ini in git repo unless you wanna your account stolen
-my_username = config.get('LOGIN', 'username').strip('"')
-my_password = config.get('LOGIN', 'password').strip('"')
+# if we can't find these fields in the config file, fail
+try:
+    my_username = config.get('LOGIN', 'username').strip('"')
+    my_password = config.get('LOGIN', 'password').strip('"')
+except Exception as e:
+    print("ERROR: Could not find username and/or password. Check that your config.ini file exists, and that username"
+          "and password are set.")
+    exit(1)
 
-disable_headless = config.get('GENERAL', 'headless') == 'False'
-# debug will slow things down and give us better log info
-debug = config.get('GENERAL', 'debug') == 'True'
+# these values can be defaulted, so don't fail if we can't find them
+try:
+    # get headless setting
+    disable_headless = config.get('GENERAL', 'headless') == 'False'
+except:
+    print("headless value not found. defaulting to headless.")
+    disable_headless = False
+
+try:
+    # debug will slow things down and give us better log info
+    debug = config.get('GENERAL', 'debug') == 'True'
+except:
+    print("debug value not found. defaulting to debug = false.")
+    debug = False
 
 if 'win' in sys.platform:
     pathname = os.path.join(os.getcwd() + '\\')
